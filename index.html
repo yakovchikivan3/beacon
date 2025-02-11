@@ -3,73 +3,81 @@
     <beacons-tag></beacons-tag>
     <div id="root"></div>
 
-    <button id="installButton" style="display: none; padding: 50px 200px; font-size: 16px; background-color: #6200ea; color: white; border: none; cursor: pointer;">
-        Встановити застосунок
-    </button>
+    <button id="installButton" style="display: none; padding: 20px 50px; font-size: 16px; background-color: #6200ea; color: white; border: none; cursor: pointer;">
+    Встановити застосунок
+</button>
 
-    <!-- Код реєстрації Service Worker -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/pwabuilder-sw.js')
-                .then((registration) => {
-                    console.log('Service Worker зареєстровано:', registration);
-                })
-                .catch((error) => {
-                    console.error('Помилка реєстрації Service Worker:', error);
-                });
-        }
+<!-- Реєстрація Service Worker -->
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/pwabuilder-sw.js')
+            .then((registration) => {
+                console.log('✅ Service Worker зареєстровано:', registration);
+            })
+            .catch((error) => {
+                console.error('❌ Помилка реєстрації Service Worker:', error);
+            });
+    }
+</script>
 
-  <script>
+<!-- Код для PWA -->
+<script>
     let deferredPrompt;
 
     window.addEventListener("beforeinstallprompt", (event) => {
-        console.log("✅ Подія beforeinstallprompt спрацювала!");
+        console.log("✅ beforeinstallprompt спрацювало!");
         event.preventDefault();
         deferredPrompt = event;
-        
+
+        // Показуємо кнопку встановлення PWA
         let installButton = document.getElementById("installButton");
         if (installButton) {
             installButton.style.display = "block";
-            console.log("✅ Кнопка встановлення показана");
-        } else {
-            console.log("❌ Кнопку #installButton не знайдено");
         }
     });
 
+    // Обробник кліку на кнопку "Встановити застосунок"
     document.getElementById("installButton").addEventListener("click", () => {
         if (deferredPrompt) {
-            console.log("🟢 Викликаємо prompt() для PWA...");
+            console.log("🟢 Викликаємо prompt()...");
             deferredPrompt.prompt();
             deferredPrompt.userChoice.then((choiceResult) => {
-                console.log(choiceResult.outcome === "accepted" ? "✅ Користувач встановив PWA" : "❌ Користувач відмовився встановлювати PWA");
+                console.log(choiceResult.outcome === "accepted" ? "✅ Користувач встановив PWA" : "❌ Користувач відмовився");
                 deferredPrompt = null;
             });
         } else {
             console.log("❌ Встановлення PWA недоступне");
         }
     });
+
+    // Підключаємося до кнопки "Реєстрація"
+    document.addEventListener("DOMContentLoaded", () => {
+        let registerButton = document.querySelector(".css-f9dlpb");
+
+        if (registerButton) {
+            console.log("✅ Кнопка 'Реєстрація' знайдена!");
+
+            registerButton.addEventListener("click", (event) => {
+                event.preventDefault();
+                console.log("🟢 Кнопку 'Реєстрація' натиснуто");
+
+                if (deferredPrompt) {
+                    console.log("🟢 Викликаємо prompt()...");
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        console.log(choiceResult.outcome === "accepted" ? "✅ Користувач встановив PWA" : "❌ Користувач відмовився");
+                        deferredPrompt = null;
+                    });
+                } else {
+                    console.log("🔴 PWA недоступне, відкриваємо посилання...");
+                    window.location.href = registerButton.href;
+                }
+            });
+        } else {
+            console.log("❌ Кнопку 'Реєстрація' не знайдено, перевір клас!");
+        }
+    });
 </script>
-
-document.querySelectorAll("a").forEach((btn) => {
-    if (btn.innerText.includes("Реєстрація")) {
-        console.log("✅ Знайдено кнопку Реєстрація!", btn);
-        btn.addEventListener("click", (event) => {
-            event.preventDefault();
-            console.log("🟢 Кнопку Реєстрація натиснуто");
-
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    console.log(choiceResult.outcome === "accepted" ? "✅ Користувач встановив PWA" : "❌ Користувач відмовився");
-                    deferredPrompt = null;
-                });
-            } else {
-                console.log("❌ Встановлення PWA недоступне");
-                window.location.href = btn.href; // Якщо PWA не підтримується, відкриваємо посилання
-            }
-        });
-    }
-});
 </body>
 </html>
 
