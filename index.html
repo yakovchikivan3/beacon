@@ -3,17 +3,43 @@
     <beacons-tag></beacons-tag>
     <div id="root"></div>
 
-    <!-- Код регистрации Service Worker -->
+    <button id="installButton" style="display: none; padding: 10px 20px; font-size: 16px; background-color: #6200ea; color: white; border: none; cursor: pointer;">
+        Встановити застосунок
+    </button>
+
+    <!-- Код реєстрації Service Worker -->
     <script>
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./pwabuilder-sw.js') // <-- Убедись, что путь правильный
-            .then((registration) => {
-                console.log('✅ Service Worker зарегистрирован:', registration);
-            })
-            .catch((error) => {
-                console.error('❌ Ошибка регистрации Service Worker:', error);
-            });
-    }
-</script>
-  </body>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/pwabuilder-sw.js')
+                .then((registration) => {
+                    console.log('Service Worker зареєстровано:', registration);
+                })
+                .catch((error) => {
+                    console.error('Помилка реєстрації Service Worker:', error);
+                });
+        }
+    </script>
+
+    <!-- Код для встановлення PWA -->
+    <script>
+        let deferredPrompt;
+
+        window.addEventListener("beforeinstallprompt", (event) => {
+            event.preventDefault();
+            deferredPrompt = event;
+            document.getElementById("installButton").style.display = "block";
+        });
+
+        document.getElementById("installButton").addEventListener("click", async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+
+                console.log(outcome === "accepted" ? "Користувач встановив застосунок" : "Користувач відмовився від встановлення");
+
+                deferredPrompt = null;
+            }
+        });
+    </script>
+</body>
 </html>
