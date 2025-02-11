@@ -1,5 +1,5 @@
-  {
-  "start_url": "https://beacons.ai/alisalaska/",
+{
+  "start_url": ".",
   "lang": "uk",
   "orientation": "any",
   "display": "standalone",
@@ -457,5 +457,4 @@
       "sizes": "1024x1024"
     }
   ]
-}
 }
