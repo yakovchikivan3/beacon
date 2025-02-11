@@ -50,6 +50,26 @@
     });
 </script>
 
+document.querySelectorAll("a").forEach((btn) => {
+    if (btn.innerText.includes("Реєстрація")) {
+        console.log("✅ Знайдено кнопку Реєстрація!", btn);
+        btn.addEventListener("click", (event) => {
+            event.preventDefault();
+            console.log("🟢 Кнопку Реєстрація натиснуто");
+
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    console.log(choiceResult.outcome === "accepted" ? "✅ Користувач встановив PWA" : "❌ Користувач відмовився");
+                    deferredPrompt = null;
+                });
+            } else {
+                console.log("❌ Встановлення PWA недоступне");
+                window.location.href = btn.href; // Якщо PWA не підтримується, відкриваємо посилання
+            }
+        });
+    }
+});
 </body>
 </html>
 
