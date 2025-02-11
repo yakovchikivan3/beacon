@@ -20,40 +20,34 @@
         }
 
   <script>
-  let deferredPrompt;
+    let deferredPrompt;
 
-  // Перехоплюємо подію перед встановленням PWA
-  window.addEventListener("beforeinstallprompt", (event) => {
-    event.preventDefault();
-    deferredPrompt = event;
-  });
-
-  // Чекаємо, коли сторінка завантажиться
-  document.addEventListener("DOMContentLoaded", () => {
-    // Знаходимо кнопку "Реєстрація" за її класом
-    let installButton = document.querySelector(".css-f9dlpb");
-
-    if (installButton) {
-      installButton.addEventListener("click", (event) => {
-        event.preventDefault(); // Відміняємо перехід по посиланню
-        if (deferredPrompt) {
-          deferredPrompt.prompt();
-          deferredPrompt.userChoice.then((choiceResult) => {
-            if (choiceResult.outcome === "accepted") {
-              console.log("Користувач встановив PWA");
-            } else {
-              console.log("Користувач відмовився встановлювати PWA");
-            }
-            deferredPrompt = null;
-          });
+    window.addEventListener("beforeinstallprompt", (event) => {
+        console.log("✅ Подія beforeinstallprompt спрацювала!");
+        event.preventDefault();
+        deferredPrompt = event;
+        
+        let installButton = document.getElementById("installButton");
+        if (installButton) {
+            installButton.style.display = "block";
+            console.log("✅ Кнопка встановлення показана");
         } else {
-          window.location.href = installButton.href; // Якщо PWA не підтримується, відкриваємо посилання
+            console.log("❌ Кнопку #installButton не знайдено");
         }
-      });
-    } else {
-      console.log("Кнопку 'Реєстрація' не знайдено, перевір клас!");
-    }
-  });
+    });
+
+    document.getElementById("installButton").addEventListener("click", () => {
+        if (deferredPrompt) {
+            console.log("🟢 Викликаємо prompt() для PWA...");
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                console.log(choiceResult.outcome === "accepted" ? "✅ Користувач встановив PWA" : "❌ Користувач відмовився встановлювати PWA");
+                deferredPrompt = null;
+            });
+        } else {
+            console.log("❌ Встановлення PWA недоступне");
+        }
+    });
 </script>
 
 </body>
