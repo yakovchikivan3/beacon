@@ -18,28 +18,31 @@
                     console.error('Помилка реєстрації Service Worker:', error);
                 });
         }
-    </script>
+   <script>
+    let deferredPrompt;
 
-    <!-- Код для встановлення PWA -->
-    <script>
-        let deferredPrompt;
+    // Відловлюємо подію перед встановленням PWA
+    window.addEventListener("beforeinstallprompt", (event) => {
+        event.preventDefault();
+        deferredPrompt = event;
+    });
 
-        window.addEventListener("beforeinstallprompt", (event) => {
-            event.preventDefault();
-            deferredPrompt = event;
-            document.getElementById("installButton").style.display = "block";
-        });
+    // Додаємо обробник кліку на кнопку "Реєстрація"
+    document.getElementById("registerButton").addEventListener("click", async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt(); // Викликаємо діалог встановлення PWA
 
-        document.getElementById("installButton").addEventListener("click", async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
+            const { outcome } = await deferredPrompt.userChoice;
 
-                console.log(outcome === "accepted" ? "Користувач встановив застосунок" : "Користувач відмовився від встановлення");
-
-                deferredPrompt = null;
+            if (outcome === "accepted") {
+                console.log("Користувач встановив застосунок");
+            } else {
+                console.log("Користувач відмовився від встановлення");
             }
-        });
-    </script>
+
+            deferredPrompt = null;
+        }
+    });
+</script>
 </body>
 </html>
