@@ -1,16 +1,10 @@
 {
-  "name": "Грай і вигравай",
-  "theme_color": "#b92d88",
-  "background_color": "#ef19ea",
-  "short_name": "Гра",
-  "display_override": [
-    "standalone",
-    "fullscreen",
-    "minimal-ui",
-    "window-controls-overlay",
-    "start url" :"https://beacons.ai/alisalaska/",
-  ],
-  "categories": [
-    "games"
-  ]
+  "start_url": "https://beacons.ai/alisalaska/",
+  "lang": "uk",
+  "orientation": "any",
+  "display": "standalone",
+  "name": "Гра",
+  "theme_color": "#982a80",
+  "background_color": "#d322b1",
+  "short_name": "Грай і вигравай"
 }
