@@ -3,7 +3,7 @@
     <beacons-tag></beacons-tag>
     <div id="root"></div>
 
-    <button id="installButton" style="display: none; padding: 50px 100px; font-size: 16px; background-color: #6200ea; color: white; border: none; cursor: pointer;">
+    <button id="installButton" style="display: none; padding: 50px 200px; font-size: 16px; background-color: #6200ea; color: white; border: none; cursor: pointer;">
         Встановити застосунок
     </button>
 
@@ -18,31 +18,28 @@
                     console.error('Помилка реєстрації Service Worker:', error);
                 });
         }
-   <script>
-    let deferredPrompt;
+    </script>
 
-    // Відловлюємо подію перед встановленням PWA
-    window.addEventListener("beforeinstallprompt", (event) => {
-        event.preventDefault();
-        deferredPrompt = event;
-    });
+    <!-- Код для встановлення PWA -->
+    <script>
+        let deferredPrompt;
 
-    // Додаємо обробник кліку на кнопку "Реєстрація"
-    document.getElementById("registerButton").addEventListener("click", async () => {
-        if (deferredPrompt) {
-            deferredPrompt.prompt(); // Викликаємо діалог встановлення PWA
+        window.addEventListener("beforeinstallprompt", (event) => {
+            event.preventDefault();
+            deferredPrompt = event;
+            document.getElementById("installButton").style.display = "block";
+        });
 
-            const { outcome } = await deferredPrompt.userChoice;
+        document.getElementById("installButton").addEventListener("click", async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
 
-            if (outcome === "accepted") {
-                console.log("Користувач встановив застосунок");
-            } else {
-                console.log("Користувач відмовився від встановлення");
+                console.log(outcome === "accepted" ? "Користувач встановив застосунок" : "Користувач відмовився від встановлення");
+
+                deferredPrompt = null;
             }
-
-            deferredPrompt = null;
-        }
-    });
-</script>
+        });
+    </script>
 </body>
 </html>
