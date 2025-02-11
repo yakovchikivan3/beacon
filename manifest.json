@@ -1,12 +1,12 @@
-{
+
   "start_url": "https://beacons.ai/alisalaska/",
   "lang": "uk",
   "orientation": "any",
   "display": "standalone",
-  "name": "Гра",
+  "name": "PWA game",
   "theme_color": "#982a80",
   "background_color": "#d322b1",
-  "short_name": "Грай і вигравай"
+  "short_name": "PWA"
   "icons": [
     {
       "src": "windows11/SmallTile.scale-100.png",
