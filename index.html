@@ -5,15 +5,15 @@
 
     <!-- Код регистрации Service Worker -->
     <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/pwabuilder-sw.js')
-                .then((registration) => {
-                    console.log('Service Worker зарегистрирован:', registration);
-                })
-                .catch((error) => {
-                    console.error('Ошибка регистрации Service Worker:', error);
-                });
-        }
-    </script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./pwabuilder-sw.js') // <-- Убедись, что путь правильный
+            .then((registration) => {
+                console.log('✅ Service Worker зарегистрирован:', registration);
+            })
+            .catch((error) => {
+                console.error('❌ Ошибка регистрации Service Worker:', error);
+            });
+    }
+</script>
   </body>
 </html>
